@@ -5,10 +5,10 @@ int main() {
     std::array<std::array<int, 5>, 5> m;
     int x = 0; 
     int y = 0;
-    for(int i = 0; i < 5; i++) {
-        for(int j = 0; j < 5; j++) {
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
             std::cin >> m[i][j];
-            if(m[i][j] == 1) {
+            if (m[i][j] == 1) {
                x = i;
                y = j;
             }
