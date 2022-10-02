@@ -17,7 +17,7 @@ int main() {
     double b = 1;
     double y = 0;
     double e = 0.001;
-    for (double x = a; x <= b; x += 0.1) {
+    for (double x = a; x <= b; x += step) {
         int i = 0;
         y = cos(x);
         s = 0;
