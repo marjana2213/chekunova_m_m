@@ -16,7 +16,7 @@ int main() {
         do {
             s += pow(x,i) * sin(i * PI / 4);
             i++;
-        } while (abs(y - s) >= 0.001);
+        } while (abs(y - s) >= e);
         std::cout << x << " " << s << " " << y << std::endl;
     }
 }
