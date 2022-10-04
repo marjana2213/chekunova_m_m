@@ -26,7 +26,7 @@ int main() {
             now = pow(-1, i) * (pow(x, 2 * i) / factorial(2 * i));
             s += now;
             i++;
-        } while (abs(y - s) >= e);
+        } while (abs(now) >= e);
         std::cout << x << " " << s << " " << y << std::endl;
     }
 }
