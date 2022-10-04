@@ -11,6 +11,7 @@ int factorial(int n) {
 }
 
 int main() {
+    double now = 0;
     double s = 0;
     double step = 0.1;
     double a = -1;
@@ -22,7 +23,8 @@ int main() {
         y = cos(x);
         s = 0;
         do {
-            s += pow(-1, i) * (pow(x,2 * i) / factorial(2 * i));
+            now = pow(-1, i) * (pow(x, 2 * i) / factorial(2 * i));
+            s += now;
             i++;
         } while (abs(y - s) >= e);
         std::cout << x << " " << s << " " << y << std::endl;
