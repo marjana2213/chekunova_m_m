@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <iomanip>
 
 int factorial(int n) {
     int f = 1;
@@ -18,6 +19,7 @@ int main() {
     double b = 1;
     double y = 0;
     double e = 0.001;
+    std::cout << "    x    s(x)    f(x)" << std::endl;
     for (double x = a; x <= b; x += step) {
         int i = 0;
         y = cos(x);
@@ -27,6 +29,7 @@ int main() {
             s += now;
             i++;
         } while (abs(now) >= e);
+        std::cout << std::fixed << std::setprecision(4);
         std::cout << x << " " << s << " " << y << std::endl;
     }
 }
