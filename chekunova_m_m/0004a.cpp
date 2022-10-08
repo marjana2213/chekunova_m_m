@@ -1,4 +1,5 @@
 #include <iostream>
+
 int main() {
     int w = 0;
     std::cin >> w;
