@@ -5,6 +5,7 @@ int main() {
 	int t = 0;
 	int n = 0;
 	int k = 0;
+	int cmin = 0;
 	char color = ' ';
 	std::cin >> t;
 	while (t--) {
@@ -15,15 +16,21 @@ int main() {
 			std::cin >> color;
 			if (color == 'W') {
 				coun++;
-				c.push_back(color);
 			}
+			c.push_back(color);
 		}
-		for (int i = k; k < n; i++) {
+		cmin = coun;
+		for (int i = k; i < n; i++) {
 			std::cin >> color;
+			c.push_back(color);
 			if (c[i - k] == 'W') {
 				coun--;
+			} 
+			if (c[i] == 'W') {
+				coun++;
 			}
+			cmin = std::min(coun, cmin);
 		}
-		std::cout << 
+		std::cout << cmin << '\n';
 	}
 }
