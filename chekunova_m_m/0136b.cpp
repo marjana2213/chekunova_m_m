@@ -1,57 +1,47 @@
 #include <iostream>
-#include <string>
-#include <cmath>
+#include <vector>
 
-int third(int x) {
-    int a = 0;
-    int i = 0;
-    while (x > 0) {
-        a += (x % 3) * pow(10, i);
-        x = x / 3;
-        i++;
-    }
-    return a;
-}
-
-int ten(int x) {
-    int a = 0;
-    int i = 0;
-    while (x > 0) {
-        a += x % 10 * pow(3, i);
-        x = x / 10;
-        i++;
-    }
-    return a;
-}
-
-int main() {
+int main()
+{
     int a = 0;
     int c = 0;
-    int a3 = 0;
-    int c3 = 0;
-    int c33 = 0;
+    int k = 0;
     std::cin >> a >> c;
-    c3 = third(c);
-    a3 = third(a);
-    int a32 = a3;
-    int i = 0;
-    while (c3 > 0) {
-        if ((c3 % 10) < (a32 % 10)) {
-            c33 += ((c3 % 10) + 3) * pow(10, i);
-        } else {
-            c33 += (c3 % 10) * pow(10, i);
+    std::vector <int> a3;
+    std::vector <int> c3;
+
+    while (a > 0 || c > 0) {
+        if (a > 0) {
+            a3.push_back(a % 3);
+            a /= 3;
         }
-        i++;
-        c3 /= 10;
-        a32 /= 10;
+        if (c > 0) {
+            c3.push_back(c % 3);
+            c /= 3;
+        }
     }
+    if (a3.size() > c3.size()) {
+        k = a3.size() - c3.size();
+        for (int i = 0; i < k; i++) {
+            c3.push_back(0);
+        }
+    } else {
+        k = c3.size() - a3.size();
+        for (int i = 0; i < k; i++) {
+            a3.push_back(0);
+        }
+    }
+    for (int i = 0; i < a3.size(); i += 1) {
+        if (c3[i] - a3[i] < 0) {
+            c3[i] += 3;
+        }
+        a3[i] = c3[i] - a3[i];
+    }
+    int pow = 1;
     int b = 0;
-    int j = 0;
-    while (c33 > 0) {
-        b += ((c33 % 10) - (a3 % 10)) * pow(10, j);
-        j++;
-        c33 /= 10;
-        a3 /= 10;
+    for (int i = 0; i < a3.size(); i += 1) {
+        b += a3[i] * pow;
+        pow *= 3;
     }
-    std::cout << ten(b);
+    std::cout << b << "\n";
 }
