@@ -1,40 +1,31 @@
 #include <iostream>
-#include <queue>
+#include <vector>
 
 int main() {
   int n = 0;
+  int games = 0;
+  int player = 0;
   long long k = 0;
-  std::queue<int> q;
-  std::cin>> n >> k;
-  if (n == 2) {
-    int a = 0;
-    int b = 0;
-    std::cin >> a;
-    std::cin >> b;
-    std::cout << std::max(a, b);
+  std::cin >> n >> k;
+  std::vector<int> v_1;
+  for (int i = 0; i < n; i++) {
+    int x = 0;
+    std::cin >> x;
+    v_1.push_back(x);
   }
-  if (n > 2) {
-    int counter = 0;
-    int num = 0;
-    std::cin >> num;
-    for (int i = 0; i < n; i++) {
-      int a = 0;
-      std::cin >> a;
-      q.push(a);
-    }
-    do {
-      if (num > q.front()) {
-        counter++;
-        q.push(q.front());
-        q.pop();
-      } else {
-        q.push(num);
-        num = q.front();
-        q.pop();
-        counter = 1;
+  player = v_1[0];
+  for (int i = 1; i <= n; i++) {
+    if (player > v_1[i]) {
+      v_1.push_back(v_1[i]);
+      ++games;
+      if (k == games) {
+        break;
       }
-      std::cout << num;
-    } while (counter != k && counter != 2 * n);
-    std::cout << num;
+    } else {
+      player = v_1[i];
+      v_1.push_back(v_1[i]);
+      games = 1;
+    }
   }
+  std::cout << player;
 }
