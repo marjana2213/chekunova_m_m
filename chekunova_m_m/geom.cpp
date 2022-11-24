@@ -1,6 +1,6 @@
 #define _USE_MATH_DEFINES
 #define epsl  1e-7
-#include "project.hpp"
+#include "geom.hpp"
 #include <cmath>
 #include <iostream>
 
@@ -97,4 +97,8 @@ bool operator==(const Rpol2D& vector1, const Rpol2D& vector2) {
 
 bool operator!=(const Rpol2D& vector1, const Rpol2D& vector2) {
 	return !((std::abs(vector1.r - vector2.r) < epsl) && (std::abs(vector1.phi - vector2.phi) < epsl));
+}
+
+Rpol2D operator /(const Rpol2D& vector, const double& nmbr) {
+	return { vector.r / nmbr, vector.phi };
 }
