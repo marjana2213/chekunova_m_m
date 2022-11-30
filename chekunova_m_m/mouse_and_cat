@@ -1,0 +1,52 @@
+#include "geom.hpp"
+
+#include <iostream>
+
+void Life_or_death(const double& dt, const double& mod_u_m_start, Rdec2D& r_m, const double& mod_u_c_start, Rdec2D& r_c, const double& r_kill) {
+
+  //мышка
+  Rdec2D u_m = (Rdec2D{ 0.0, 0.0 } - r_m) / Norm(Rdec2D{ 0.0, 0.0 } - r_m) * mod_u_m_start;
+  Rdec2D dr_m;
+  Rdec2D past_r_m = r_m;
+
+  //кошка
+  Rdec2D u_c = (r_m - r_c) / Norm(r_m - r_c) * mod_u_c_start;
+  Rdec2D dr_c;
+  Rdec2D past_r_c = r_c;
+
+  for (int i = 0; i < 1000; i += dt) {
+    //работа с мышкой
+    u_m = (Rdec2D{ 0.0, 0.0 } - r_m) / Norm(Rdec2D{ 0.0, 0.0 } - r_m) * mod_u_m_start;
+    dr_m = u_m * dt;
+    r_m = r_m + dr_m;
+
+    //работа с кошкой
+    u_c = (r_m - r_c) / Norm(r_m - r_c) * mod_u_c_start;
+    dr_c = u_c * dt;
+    r_c = r_c + dr_c;
+
+    if (r_m.y >= 0) {
+      std::cout << "mouse won";
+      break;
+    } else {
+      if (Norm(r_m - r_c) <= r_kill) {
+        std::cout << "mouse died";
+        break;
+      } else {
+        if (Norm(r_m - r_c) > Norm(past_r_m - past_r_c)) {
+          std::cout << "mouse will win";
+          break;
+        }
+      }
+    }
+    past_r_m = r_m;
+    past_r_c = r_c;
+  }
+}
+
+
+int main() {
+  Rdec2D a = {3.0, 2.1};
+  Rdec2D b = {0.1, 3};
+  Life_or_death(2.0, 2.0, a, 2.0, b, 2.0);
+}
