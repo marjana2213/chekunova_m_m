@@ -1,104 +1,92 @@
 #define _USE_MATH_DEFINES
-#define epsl  1e-7
 #include "geom.hpp"
 #include <cmath>
-#include <iostream>
+#include<iostream>
+#include <limits>
 
 
-std::ostream& operator<<(std::ostream& ostrm, const Rdec2D& a) {
-	return ostrm << "[x;y]" << "-> " << '[' << a.x << ';' << a.y << ']';
+std::ostream& operator<<(std::ostream& ostrm, const Rdec2D& z) {
+  return ostrm << '(' << z.x << ',' << z.y << ')';
+}
+std::ostream& operator<<(std::ostream& ostrm, const Rpol2D& z) {
+  return ostrm << '[' << z.r << ',' << z.phi << ']';
+}
+Rdec2D operator-(const Rdec2D& lhs) {
+  return { -lhs.x, -lhs.y };
+}
+Rpol2D operator-(const Rpol2D& lhs) {
+  if (lhs.phi >= M_PI) {
+    return { lhs.r, lhs.phi - M_PI };
+  }
+  else {
+    return { lhs.r, lhs.phi + M_PI };
+  }
 }
 
-std::ostream& operator<<(std::ostream& ostrm, const Rpol2D& a) {
-	return ostrm << "(x;y)" << "-> " << '(' << a.r << ';' << a.phi << ')';
+Rdec2D operator+(const Rdec2D& lhs, const Rdec2D& rhs) {
+  return { lhs.x + rhs.x, lhs.y + rhs.y };
+}
+Rpol2D operator+(const Rpol2D& lhs, const Rpol2D& rhs) {
+  Rdec2D vectr1 = ToDec(lhs);
+  Rdec2D vectr2 = ToDec(rhs);
+  return ToPol({ vectr1.x + vectr2.x, vectr1.y + vectr2.y });
 }
 
-Rdec2D operator-(const Rdec2D& vector) {
-	return { -vector.x, -vector.y };
+Rdec2D operator-(const Rdec2D& lhs, const Rdec2D& rhs) {
+  return { lhs.x - rhs.x, lhs.y - rhs.y };
+}
+Rpol2D operator-(const Rpol2D& lhs, const Rpol2D& rhs) {
+  Rdec2D vectr1 = ToDec(lhs);
+  Rdec2D vectr2 = ToDec(rhs);
+  return ToPol({ vectr1.x - vectr2.x, vectr1.y - vectr2.y });
 }
 
-Rdec2D operator+(const Rdec2D& vector1, const Rdec2D& vector2) {
-	return { vector1.x + vector2.x, vector1.y + vector2.y };
+Rdec2D operator*(const Rdec2D& lhs, const double& nmbr) {
+  return { nmbr * lhs.x,nmbr * lhs.y };
+}
+Rpol2D operator*(const Rpol2D& lhs, const double& nmbr) {
+  return { lhs.r * nmbr, lhs.phi };
 }
 
-Rdec2D operator-(const Rdec2D& vector1, const Rdec2D& vector2) {
-	return { vector1.x - vector2.x, vector1.y - vector2.y };
+Rdec2D operator /(const Rdec2D& lhs, const double& nmbr) {
+  return { lhs.x / nmbr, lhs.y / nmbr };
+}
+Rpol2D operator /(const Rpol2D& lhs, const double& nmbr) {
+  return { lhs.r / nmbr, lhs.phi };
 }
 
-Rdec2D operator*(const Rdec2D& vector, const double& z) {
-	return { vector.x * z, vector.y * z };
+double Dot(const Rdec2D& lhs, const Rdec2D& rhs) {
+  return lhs.x * rhs.x + lhs.y * rhs.y;
+}
+double Dot(const Rpol2D& lhs, const Rpol2D& rhs) {
+  return (lhs.r * rhs.r * std::cos(std::abs(lhs.phi - rhs.phi)));
 }
 
-Rdec2D operator/(const Rdec2D& vector, const double& z) {
-	return { vector.x / z, vector.y / z };
+double Norm(const Rdec2D& lhs) {
+  return sqrt(lhs.x * lhs.x + lhs.y * lhs.y);
 }
 
-double Dot(const Rdec2D vector1, const Rdec2D& vector2) {
-	return { vector1.x * vector2.x + vector1.y * vector2.y };
+Rdec2D ToDec(const Rpol2D& lhs) {
+  return { lhs.r * std::cos(lhs.phi), lhs.r * std::sin(lhs.phi) };
+}
+Rpol2D ToPol(const Rdec2D& lhs) {
+  if (lhs.y > 0) {
+    return { Norm(lhs), std::acos(lhs.x / Norm(lhs)) };
+  }
+  else {
+    return { Norm(lhs), 2 * M_PI - std::acos(lhs.x / Norm(lhs)) };
+  }
 }
 
-double Norm(const Rdec2D vector) {
-	return { sqrt(vector.x * vector.x + vector.y * vector.y) };
+bool operator ==(const Rpol2D& lhs, const Rpol2D& rhs) {
+  return ((std::abs(lhs.r - rhs.r) < epsl) && (std::abs(lhs.phi - rhs.phi) < epsl));
 }
-
-bool operator==(const Rdec2D& vector1, const Rdec2D& vector2) {
-	return ((std::abs(vector1.x - vector2.x) < epsl) && (std::abs(vector1.y - vector2.y) < epsl));
+bool operator ==(const Rdec2D& lhs, const Rdec2D& rhs) {
+  return (std::abs(Norm(rhs) - Norm(lhs)) < epsl && std::abs(rhs.x / lhs.x - rhs.y / lhs.y) < epsl);
 }
-
-bool operator!=(const Rdec2D& vector1, const Rdec2D& vector2) {
-	return !((std::abs(vector1.x - vector2.x) < epsl) && (std::abs(vector1.y - vector2.y) < epsl));
+bool operator!=(const Rpol2D& lhs, const Rpol2D& rhs) {
+  return !((std::abs(lhs.r - rhs.r) < epsl) && (std::abs(lhs.phi - rhs.phi) < epsl));
 }
-
-Rpol2D ToPol(const Rdec2D& vector) {
-	if (vector.y > 0) {
-		return { Norm(vector), std::acos(vector.x / Norm(vector)) };
-	}
-	else {
-		return { Norm(vector), 2 * M_PI - std::acos(vector.x / Norm(vector)) };
-	}
-}
-
-Rdec2D ToDec(const Rpol2D& vector) {
-	return { vector.r * std::cos(vector.phi), vector.r * std::sin(vector.phi) };
-}
-
-Rpol2D operator-(const Rpol2D& vector) {
-	if (vector.phi >= M_PI) {
-		return { vector.r, vector.phi - M_PI };
-	}
-	else {
-		return { vector.r, vector.phi + M_PI };
-	}
-}
-
-Rpol2D operator+(const Rpol2D& vector1, const Rpol2D& vector2) {
-	Rdec2D vector3 = ToDec(vector1);
-	Rdec2D vector4 = ToDec(vector2);
-	return ToPol({ vector3.x + vector4.x, vector3.y + vector4.y });
-}
-
-Rpol2D operator-(const Rpol2D& vector1, const Rpol2D& vector2) {
-	Rdec2D vector3 = ToDec(vector1);
-	Rdec2D vector4 = ToDec(vector2);
-	return ToPol({ vector3.x - vector4.x, vector3.y - vector4.y });
-}
-
-Rpol2D operator*(const Rpol2D& vector, const double& z) {
-	return { vector.r * z, vector.phi };
-}
-
-double Dot(const Rpol2D& vector1, const Rpol2D& vector2) {
-	return { (vector1.r * vector2.r * std::cos(std::abs(vector1.phi - vector2.phi))) };
-}
-
-bool operator==(const Rpol2D& vector1, const Rpol2D& vector2) {
-	return ((std::abs(vector1.r - vector2.r) < epsl) && (std::abs(vector1.phi - vector2.phi) < epsl));
-}
-
-bool operator!=(const Rpol2D& vector1, const Rpol2D& vector2) {
-	return !((std::abs(vector1.r - vector2.r) < epsl) && (std::abs(vector1.phi - vector2.phi) < epsl));
-}
-
-Rpol2D operator /(const Rpol2D& vector, const double& nmbr) {
-	return { vector.r / nmbr, vector.phi };
+bool operator!=(const Rdec2D& lhs, const Rdec2D& rhs) {
+  return !(std::abs(Norm(rhs) - Norm(lhs)) < epsl && std::abs(rhs.x / lhs.x - rhs.y / lhs.y) < epsl);
 }
