@@ -15,18 +15,21 @@ int main() {
         word.push_back(temp);
     }
 
+    if (n % 2 == 0) {
+        index = n / 2 - 1;
+    }
+    else {
+        index = n / 2;
+    }
     for (int i = 0; i < n; i++) {
-        if ((str.size() - i) % 2 == 0) {
-            index = (str.size() - i) / 2 - 1;
+        std::cout << index;
+        word[index] = str[i];
+        if (i % 2 == 0) {
+            index += i + 1;
         }
         else {
-            index = (str.size() - i) / 2;
+            index -= i;
         }
-        //word.push_back(str[index]);
-        //str.erase(str.begin() + index);
-
-        word[index] = str[i];
-        //str.erase(str.begin());
-        std::cout <<  word[i];
+        std::cout << word[i];
     }
 }
