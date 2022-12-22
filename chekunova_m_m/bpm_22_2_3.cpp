@@ -16,7 +16,8 @@ int main() {
     }
 
     if (n % 2 == 0) {
-        index = n / 2 - 1;
+        index = n / 2;
+        word.push_back('0');
     }
     else {
         index = n / 2;
@@ -30,7 +31,14 @@ int main() {
         }
         word[index] = str[i];
     }
-    for (int i = 0; i < n; i++) {
-        std::cout << word[i];
+    if (n % 2 != 0) {
+        for (int i = 0; i < n; i++) {
+            std::cout << word[i];
+        }
+    }
+    else {
+        for (int i = n - 1; i > -1; i--) {
+            std::cout << word[i];
+        }
     }
 }
