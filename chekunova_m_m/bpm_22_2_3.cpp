@@ -22,14 +22,15 @@ int main() {
         index = n / 2;
     }
     for (int i = 0; i < n; i++) {
-        std::cout << index;
-        word[index] = str[i];
         if (i % 2 == 0) {
-            index += i + 1;
+            index += i;
         }
         else {
             index -= i;
         }
+        word[index] = str[i];
+    }
+    for (int i = 0; i < n; i++) {
         std::cout << word[i];
     }
 }
