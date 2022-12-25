@@ -1,0 +1,39 @@
+#include "geom.hpp"
+#include <iostream>
+#include <cmath>
+#include <fstream>
+
+int main() {
+	vector r_cat{10, 0}; 
+	vector r_mouse{0, -10}; 
+	vector h{0, 0};
+	vector vec_cat;
+	vector vec_mouse;
+	vector vec_h{0, 1};
+	double v_cat = 5; 
+	double v_mouse = 4;  
+	double r = 0.3; 
+	double dt = 0.05;  
+	std::ofstream file;
+	vector a_mouse{0, 0};
+	double sum = 0; 
+	double distance = 10;  
+	double sum_dt = dt;
+	double c1 = 1;
+	double c2 = 1;
+	file.open("res.txt");
+	while (r_mouse.y <= 0 && Norm(r_mouse - r_cat) - r > 0) {
+		vec_cat = (r_cat - r_mouse) / Norm(r_cat - r_mouse) * (v_cat * dt);
+		r_cat = r_cat + vec_cat;
+		v_cat = v_cat + v_cat * dt;
+		if (Norm(r_mouse - r_cat) - distance < 0)
+			a_mouse = ((r_mouse - r_cat) * c1) / (Norm(r_mouse - r_cat) + c2);
+		if (Norm(r_mouse - r_cat) - distance < 0) {
+			vec_mouse = (vec_cat + vec_h) / Norm(vec_cat + vec_h) * (v_mouse * dt + Norm(a_mouse) * dt * dt / 2);
+		}
+		else vec_mouse = (-r_mouse) / Norm(r_mouse) * (v_mouse * dt + Norm(a_mouse) * dt * dt / 2);
+		r_mouse = r_mouse + vec_mouse;
+		v_mouse = v_mouse + Norm(a_mouse) * dt;
+		file << r_cat.x << " " << r_cat.y << " " << r_mouse.x << " " << r_mouse.y << "\n";		
+	}
+}
